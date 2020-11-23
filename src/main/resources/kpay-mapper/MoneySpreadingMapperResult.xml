@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.moneySpreading.dao.MoneySpreadingResultDao">
+
+	<!-- 돈 뿌리기 요청 후 받기를 위한 금액 정보를 설정합니다. -->
+	<insert id="insertMoneySpreadingResult" parameterType="MoneySpreadingResult">
+		INSERT INTO TB_MONEY_SPREADING_RESULT ( 
+			 SPREADING_ID
+			,MONEY_AMOUNT
+			,USER_ID
+		) VALUES (
+			 #{spreadingId} 
+			,#{moneyAmount} 
+			,#{userId}  
+		)
+	</insert>
+  
+  	<!-- 뿌리기 요청 건당 한 사용자는 한 번만 받기를 할 수 있습니다. -->
+  	<select id="selectMoneySpreadingResult" parameterType="MoneySpreadingResult" resultType="MoneySpreadingResult">
+		SELECT 
+			 SPREADING_RESULT_ID	AS spreadingResultId
+			,SPREADING_ID			AS spreadingId
+			,MONEY_AMOUNT			AS moneyAmount
+			,USER_ID				AS userId
+			,RECEIVED_DTTM			AS receivedDttm
+			,REG_EMNO				AS regEmno
+			,REG_DTTM				AS regDttm
+			,MODI_EMNO				AS modiEmno
+			,MODI_DTTM				AS modiDttm
+		FROM TB_MONEY_SPREADING_RESULT 
+	   WHERE 1=1
+	     AND SPREADING_ID = #{spreadingId}
+	     AND USER_ID 	  = #{userId}
+	</select>
+  
+  	<!-- 아무도 할당 되는 지 않은 금액에 받은 사용자 ID를 할당합니다. -->
+	<update id="updateMoneySpreadingResult" parameterType="MoneySpreadingResult">        
+		UPDATE TB_MONEY_SPREADING_RESULT
+		SET 
+			USER_ID = #{userId}
+		WHERE
+			SPREADING_RESULT_ID = (
+				SELECT TB_TEMP. SPERADING_RESULT_ID
+                  FROM (
+					 SELECT 	MIN(SPREADING_RESULT_ID) AS SPERADING_RESULT_ID
+					   FROM 	TB_MONEY_SPREADING_RESULT 
+					  WHERE 	SPREADING_ID = #{spreadingId} AND USER_ID = 0
+                  ) TB_TEMP
+			)
+		
+		<selectKey keyProperty="moneyAmount" resultType="BigDecimal" order="AFTER">
+        	SELECT 	MONEY_AMOUNT	AS moneyAmount
+        	FROM 	TB_MONEY_SPREADING_RESULT 
+        	WHERE 	SPREADING_ID = #{spreadingId} AND USER_ID = #{userId}
+        </selectKey>
+         
+	</update>
+	
+
+	<select id="selectMoneySpreadingResultList" parameterType="MoneySpreadingResult" resultType="MoneySpreadingResult">
+		SELECT 
+			 SPREADING_RESULT_ID	AS spreadingResultId
+			,SPREADING_ID			AS spreadingId
+			,MONEY_AMOUNT			AS moneyAmount
+			,USER_ID				AS userId
+			,RECEIVED_DTTM			AS receivedDttm
+			,REG_EMNO				AS regEmno
+			,REG_DTTM				AS regDttm
+			,MODI_EMNO				AS modiEmno
+			,MODI_DTTM				AS modiDttm
+		FROM TB_MONEY_SPREADING_RESULT		
+	   WHERE SPREADING_ID = #{spreadingId} AND USER_ID != 0
+	</select>
+	
+</mapper>
+

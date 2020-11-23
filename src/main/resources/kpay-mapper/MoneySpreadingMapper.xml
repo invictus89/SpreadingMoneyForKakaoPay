@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.moneySpreading.dao.MoneySpreadingDao">
+
+	<!-- 돈 뿌리기 요청 데이터 값을 저장한다. -->
+	<insert id="insertMoneySpreading" parameterType="MoneySpreading" useGeneratedKeys="true" keyProperty="spreadingId">
+		INSERT INTO TB_MONEY_SPREADING ( 
+			 USER_ID
+			,ROOM_ID
+			,MONEY_AMOUNT
+			,USER_COUNT
+			,TOKEN
+		) VALUES (
+			 #{userId} 
+			,#{roomId} 
+			,#{moneyAmount} 
+			,#{userCount} 
+			,#{token} 
+		)
+	</insert>
+  
+  	<!-- 돈을 받기 위하여 spreading_id 정보를 가져온다. -->
+  	<select id="selectMoneySpreading" parameterType="MoneySpreading" resultType="MoneySpreading">
+		SELECT 
+			 SPREADING_ID	AS spreadingId
+			,USER_ID		AS userId
+			,ROOM_ID		AS roomId
+			,MONEY_AMOUNT	AS moneyAmount
+			,USER_COUNT		AS userCount
+			,USER_ID		AS userId
+			,TOKEN			AS token
+			,SPREADING_DTTM AS spreadingDttm
+			,REG_EMNO		AS regEmno
+			,REG_DTTM		AS regDttm
+			,MODI_EMNO		AS modiEmno
+			,MODI_DTTM		AS modiDttm
+		FROM TB_MONEY_SPREADING
+			WHERE 1=1
+			  AND ROOM_ID = #{roomId}
+			  AND TOKEN = #{token}		
+			  AND SPREADING_DTTM >= DATE_ADD(NOW(), INTERVAL ${validationInterval} ${validationUnit})
+	</select>
+ 
+  	<select id="getTakenMoneyAmount" parameterType="MoneySpreading" resultType="bigdecimal">
+		SELECT 
+			SUM(T2.MONEY_AMOUNT) AS takenMoneyAmount
+		  FROM TB_MONEY_SPREADING T1
+		 INNER JOIN TB_MONEY_SPREADING_RESULT T2
+		    ON T1.SPREADING_ID = T2.SPREADING_ID
+		 WHERE T2.USER_ID != 0
+		   AND T1.SPREADING_ID = #{spreadingId}
+	</select>
+</mapper>
+
