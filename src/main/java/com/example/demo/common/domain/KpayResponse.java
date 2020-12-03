@@ -5,25 +5,25 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.ALWAYS)
 public class KpayResponse {
-	private String code;
+	private String httpState;
 
 	private String message;
 	
-	public KpayResponse(String code, String message, Object result) {
+	public KpayResponse(String httpState, String message, Object result) {
 		super();
-		this.code = code;
+		this.httpState = httpState;
 		this.message = message;
 		this.result = result;
 	}
 
 	private Object result;
 
-	public String getCode() {
-		return code;
+	public String getHttpState() {
+		return httpState;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setHttpState(String httpState) {
+		this.httpState = httpState;
 	}
 
 	public String getMessage() {

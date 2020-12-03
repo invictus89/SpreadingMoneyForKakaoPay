@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +49,7 @@ public class MoneySpreadingController {
 		Map<String, String> resultMap = new HashMap<>();
 		resultMap.put("token", moneySpreadingService.spreadMoney(moneySpreading));
 		
-		
+		//return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
 		return ResponseEntity.ok(new KpayResponse("SUCCESS", "돈 뿌리기 성공", resultMap));
 	}
 	
@@ -59,7 +60,7 @@ public class MoneySpreadingController {
 	 * @param token 뿌리기요청 시의 토큰 정보
 	 */
 	@ApiOperation(value = "돈뿌리기_받기_API", notes = "대화방에 참여한 사람은 돈을 받습니다.")
-	@PostMapping("/takemoney")
+	@PutMapping("/takemoney")
 	public ResponseEntity<KpayResponse> takeMoney(
 			@RequestHeader(value = "X-USER-ID") int userId,
 			@RequestHeader(value = "X-ROOM-ID") String roomId,

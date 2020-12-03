@@ -39,8 +39,10 @@ public class MoneySpreadingService {
 		BigDecimal moneyAmount = moneySpreading.getMoneyAmount();
 		int userId = moneySpreading.getUserId();
 		
+		// 3자리 문자열 TOKEN 생성 Start
 		GenerateCertNumber gcn = new GenerateCertNumber();
 		String token = gcn.excuteGenerate(3);
+		// 3자리 문자열 TOKEN 생성 End
 		moneySpreading.setToken(token);
 		moneySpreadingDao.insertMoneySpreading(moneySpreading);
 		
@@ -53,6 +55,7 @@ public class MoneySpreadingService {
 			moneyAmounts[i] = new BigDecimal(random.nextInt(moneyAmount.intValue()));
 			moneyAmount = moneyAmount.subtract(moneyAmounts[i]);
 		}
+		//마지막으로 분배될 금액 = 남은 금액
 		moneyAmounts[moneyAmounts.length-1] = moneyAmount;
 		
 		MoneySpreadingResult moneySpreadingResult = new MoneySpreadingResult();
@@ -76,12 +79,12 @@ public class MoneySpreadingService {
 		moneySpreading.setToken(token);
 		moneySpreading.setRoomId(roomId);
 		moneySpreading.setValidationInterval(-10);
-		moneySpreading.setValidationUnit("MINUTE");
+		moneySpreading.setValidationUnit("HOUR");
 		moneySpreading = moneySpreadingDao.selectMoneySpreading(moneySpreading);
 		
 		// 2. 유효성 검사 - 뿌리기 건은 10분간만 유효하고 동일한 대화방에 속한 사용자만 받기를 할 수 있다.
 		if(moneySpreading == null) {
-			throw new KpayException("FAIL", "뿌리기 건이 존재하지 않거나, 유효시간(10분)이 초과되었습니다.");
+			throw new KpayException("FAIL", "뿌리기 건이 존재하지 않거나, 방 정보 또는 유효시간(10분)이 초과되었습니다.");
 		}
 		
 		// 3. 자신이 뿌린 금액은 받을 수 없습니다.
