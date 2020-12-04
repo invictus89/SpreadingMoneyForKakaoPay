@@ -78,8 +78,8 @@ public class MoneySpreadingService {
 		MoneySpreading moneySpreading = new MoneySpreading();
 		moneySpreading.setToken(token);
 		moneySpreading.setRoomId(roomId);
-		moneySpreading.setValidationInterval(-1);
-		moneySpreading.setValidationUnit("HOUR");
+		moneySpreading.setValidationInterval(-10);
+		moneySpreading.setValidationUnit("MINUTE");
 		moneySpreading = moneySpreadingDao.selectMoneySpreading(moneySpreading);
 		
 		// 2. 유효성 검사 - 뿌리기 건은 10분간만 유효하고 동일한 대화방에 속한 사용자만 받기를 할 수 있다.
@@ -124,6 +124,7 @@ public class MoneySpreadingService {
 	public Map<String, Object> readInfo(int userId, String roomId, String token) {
 		
 		MoneySpreading moneySpreading = new MoneySpreading();
+		// 뿌린 사람만 조회 가능하도록, 뿌리기 요청자에 해당하는 뿌리기 정보만을 가져온다.
 		moneySpreading.setUserId(userId);
 		moneySpreading.setToken(token);
 		moneySpreading.setRoomId(roomId);

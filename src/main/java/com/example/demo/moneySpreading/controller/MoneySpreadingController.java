@@ -50,7 +50,7 @@ public class MoneySpreadingController {
 		resultMap.put("token", moneySpreadingService.spreadMoney(moneySpreading));
 		
 		//return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
-		return ResponseEntity.ok(new KpayResponse("SUCCESS", "돈 뿌리기 성공", resultMap));
+		return ResponseEntity.ok(KpayResponse.builder().httpState("SUCCESS").message("돈뿌리기 성공").result(resultMap).build());
 	}
 	
 	/**

@@ -162,6 +162,6 @@ public class MoneySpreadingServiceTest {
 		
 		String token = moneySpreadService.spreadMoney(moneySpreading);
 		
-		assertThat(moneySpreadService.readMoney(userId, roomId, token)).isNotNull();
+		assertThat(moneySpreadService.readInfo(userId, roomId, token)).isNotNull();
 	}
 }
