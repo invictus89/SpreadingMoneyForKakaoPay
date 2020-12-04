@@ -126,7 +126,7 @@ public class MoneySrpeadingControllerTest {
 		
 		String token = resultMap.get("token");
 		
-		mockMvc.perform(get("/kpay/readmoney")
+		mockMvc.perform(get("/kpay/readinfo")
 					.contentType(MediaType.APPLICATION_JSON_UTF8)
 					.header("X-USER-ID", userId)
 					.header("X-ROOM-ID", roomId)

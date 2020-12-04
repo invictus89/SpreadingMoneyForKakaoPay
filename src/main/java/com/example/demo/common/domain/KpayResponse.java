@@ -22,6 +22,4 @@ public class KpayResponse {
 		this.message = message;
 		this.result = result;
 	}
-	
-	
 }
