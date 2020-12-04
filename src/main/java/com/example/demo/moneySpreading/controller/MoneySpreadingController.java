@@ -70,7 +70,9 @@ public class MoneySpreadingController {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("moneyAmount", moneySpreadingService.takeMoney(userId, roomId, token));
 		
-		return ResponseEntity.ok(new KpayResponse("SUCCESS", "돈 받기 성공", resultMap)); 
+		//return ResponseEntity.ok(new KpayResponse("SUCCESS", "돈 받기 성공", resultMap));
+		return ResponseEntity.ok(KpayResponse.builder().httpState("SUCCESS").message("돈 받기 성공").result(resultMap).build());
+		
 	}
 	
 	/**
@@ -89,7 +91,8 @@ public class MoneySpreadingController {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("result", moneySpreadingService.readInfo(userId, roomId, token));
 		
-		return ResponseEntity.ok(new KpayResponse("SUCCESS", "뿌리기 건 조회 성공", resultMap));
+		//return ResponseEntity.ok(new KpayResponse("SUCCESS", "뿌리기 건 조회 성공", resultMap));
+		return ResponseEntity.ok(KpayResponse.builder().httpState("SUCCESS").message("뿌리기 건 조회 성공").result(resultMap).build());
 	}
 	
 }
