@@ -6,17 +6,17 @@
 	<!-- 돈 뿌리기 요청 데이터 값을 저장한다. -->
 	<insert id="insertMoneySpreading" parameterType="MoneySpreading" useGeneratedKeys="true" keyProperty="spreadingId">
 		INSERT INTO TB_MONEY_SPREADING ( 
-			 USER_ID
+			 TOKEN
+			,USER_ID
 			,ROOM_ID
 			,MONEY_AMOUNT
 			,USER_COUNT
-			,TOKEN
 		) VALUES (
-			 #{userId} 
+			 #{token} 
+			,#{userId} 
 			,#{roomId} 
 			,#{moneyAmount} 
 			,#{userCount} 
-			,#{token} 
 		)
 	</insert>
   
@@ -24,17 +24,18 @@
   	<select id="selectMoneySpreading" parameterType="MoneySpreading" resultType="MoneySpreading">
 		SELECT 
 			 SPREADING_ID	AS spreadingId
+			,TOKEN			AS token
 			,USER_ID		AS userId
 			,ROOM_ID		AS roomId
 			,MONEY_AMOUNT	AS moneyAmount
 			,USER_COUNT		AS userCount
 			,USER_ID		AS userId
-			,TOKEN			AS token
 			,SPREADING_DTTM AS spreadingDttm
 			,REG_EMNO		AS regEmno
 			,REG_DTTM		AS regDttm
 			,MODI_EMNO		AS modiEmno
 			,MODI_DTTM		AS modiDttm
+			,CMPE_YN		AS cmpeYn
 		FROM TB_MONEY_SPREADING
 			WHERE 1=1
 			  AND ROOM_ID = #{roomId}
@@ -48,8 +49,22 @@
 		  FROM TB_MONEY_SPREADING T1
 		 INNER JOIN TB_MONEY_SPREADING_RESULT T2
 		    ON T1.SPREADING_ID = T2.SPREADING_ID
-		 WHERE T2.USER_ID != 0
+		 WHERE T2.USER_ID IS NOT NULL
+		   AND T2.CMPE_YN = 'Y'
 		   AND T1.SPREADING_ID = #{spreadingId}
 	</select>
+	
+	<!-- 받기 동작 후 해당 뿌리기 요청에 대한 받기 완료 여부 체크 후 업데이트 한다. -->
+	<update id="updateMoneySpreadingCmpeYn" parameterType="MoneySpreading">        
+		UPDATE TB_MONEY_SPREADING
+	       SET
+		 		 CMPE_YN = #{cmpeYn}
+	    		,MODI_DTTM = NOW()
+	 	 WHERE SPREADING_ID = #{spreadingId}
+	   	   AND ( SELECT COUNT(*) AS CNT 
+		  		  FROM TB_MONEY_SPREADING_RESULT 
+		 		 WHERE SPREADING_ID = #{spreadingId}
+		   		   AND CMPE_YN = 'N') = 0
+	</update>
 </mapper>
 

@@ -8,11 +8,9 @@
 		INSERT INTO TB_MONEY_SPREADING_RESULT ( 
 			 SPREADING_ID
 			,MONEY_AMOUNT
-			,USER_ID
 		) VALUES (
 			 #{spreadingId} 
 			,#{moneyAmount} 
-			,#{userId}  
 		)
 	</insert>
   
@@ -28,6 +26,7 @@
 			,REG_DTTM				AS regDttm
 			,MODI_EMNO				AS modiEmno
 			,MODI_DTTM				AS modiDttm
+			,CMPE_YN				AS cmpeYn
 		FROM TB_MONEY_SPREADING_RESULT 
 	   WHERE 1=1
 	     AND SPREADING_ID = #{spreadingId}
@@ -38,14 +37,17 @@
 	<update id="updateMoneySpreadingResult" parameterType="MoneySpreadingResult">        
 		UPDATE TB_MONEY_SPREADING_RESULT
 		SET 
-			USER_ID = #{userId}
+			 USER_ID = #{userId}
+			,CMPE_YN = #{cmpeYn}
+			,RECEIVED_DTTM = NOW()
+			,MODI_DTTM = NOW()
 		WHERE
 			SPREADING_RESULT_ID = (
 				SELECT TB_TEMP. SPERADING_RESULT_ID
                   FROM (
 					 SELECT 	MIN(SPREADING_RESULT_ID) AS SPERADING_RESULT_ID
 					   FROM 	TB_MONEY_SPREADING_RESULT 
-					  WHERE 	SPREADING_ID = #{spreadingId} AND USER_ID = 0
+					  WHERE 	SPREADING_ID = #{spreadingId} AND USER_ID IS NULL
                   ) TB_TEMP
 			)
 		

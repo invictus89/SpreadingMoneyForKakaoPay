@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.moneySpreading.dto.MoneySpreading;
+import com.example.demo.moneySpreading.dto.MoneySpreadingResult;
 
 @Repository
 public interface MoneySpreadingDao {
@@ -16,5 +17,7 @@ public interface MoneySpreadingDao {
 	MoneySpreading selectMoneySpreading(MoneySpreading moneySpreading);
 	
 	BigDecimal getTakenMoneyAmount(MoneySpreading moneySpreading);
+	
+	int updateMoneySpreadingCmpeYn(MoneySpreading moneySpreading);
 	
 }

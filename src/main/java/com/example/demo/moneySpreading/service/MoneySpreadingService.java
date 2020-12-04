@@ -78,7 +78,7 @@ public class MoneySpreadingService {
 		MoneySpreading moneySpreading = new MoneySpreading();
 		moneySpreading.setToken(token);
 		moneySpreading.setRoomId(roomId);
-		moneySpreading.setValidationInterval(-10);
+		moneySpreading.setValidationInterval(-1);
 		moneySpreading.setValidationUnit("HOUR");
 		moneySpreading = moneySpreadingDao.selectMoneySpreading(moneySpreading);
 		
@@ -103,7 +103,12 @@ public class MoneySpreadingService {
 		
 		// 5. 뿌리기 요청 건 별 RESULT_TABLE의 userId가 비어있는 데이터부터 순차적으로 업데이트한다.
 		//    업데이트 후 바로 업데이트된 금액은 가져온다. 
+		moneySpreadingResult.setCmpeYn('Y'); // 'Y' : 받기완료, 'N' : 받기미완료
 		moneySpreadingResultDao.updateMoneySpreadingResult(moneySpreadingResult);
+		
+		// 6. 받기 수행 후 뿌리기 요청 건의 받기 완료 여부를 체크한다.
+		moneySpreading.setCmpeYn('Y'); // 'Y' : 받기완료, 'N' : 받기미완료
+		moneySpreadingDao.updateMoneySpreadingCmpeYn(moneySpreading);
 		
 		return moneySpreadingResult.getMoneyAmount();
 	}
@@ -116,7 +121,7 @@ public class MoneySpreadingService {
 	 * @param token 뿌리기 요청건에 대한 고유 token
 	 * @return
 	 */
-	public Map<String, Object> readMoney(int userId, String roomId, String token) {
+	public Map<String, Object> readInfo(int userId, String roomId, String token) {
 		
 		MoneySpreading moneySpreading = new MoneySpreading();
 		moneySpreading.setUserId(userId);
@@ -134,9 +139,9 @@ public class MoneySpreadingService {
 		BigDecimal takenMoneyAmount = moneySpreadingDao.getTakenMoneyAmount(moneySpreading);
 		moneySpreading.setTakenMoneyAmount(takenMoneyAmount);
 		
-		MoneySpreadingResult moneySprayingResult= new MoneySpreadingResult();
-		moneySprayingResult.setSpreadingId(moneySpreading.getSpreadingId());
-		List<MoneySpreadingResult> moneySpreadingResultList = moneySpreadingResultDao.selectMoneySpreadingResultList(moneySprayingResult);
+		MoneySpreadingResult moneySpreadingResult= new MoneySpreadingResult();
+		moneySpreadingResult.setSpreadingId(moneySpreading.getSpreadingId());
+		List<MoneySpreadingResult> moneySpreadingResultList = moneySpreadingResultDao.selectMoneySpreadingResultList(moneySpreadingResult);
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("spreadingInfo", moneySpreading);

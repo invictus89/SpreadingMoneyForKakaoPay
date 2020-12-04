@@ -80,14 +80,14 @@ public class MoneySpreadingController {
 	 * @param token 뿌리기요청 시의 토큰 정보
 	 */
 	@ApiOperation(value = "돈뿌리기_조회_API", notes = "뿌리기건을 조회합니다.")
-	@GetMapping("/readmoney")
+	@GetMapping("/readinfo")
 	public ResponseEntity<KpayResponse> describeMoneySpraying(
 			@RequestHeader(value = "X-USER-ID") int userId,
 			@RequestHeader(value = "X-ROOM-ID") String roomId, 
 			@RequestHeader(value = "X-TOKEN-ID") String token) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("result", moneySpreadingService.readMoney(userId, roomId, token));
+		resultMap.put("result", moneySpreadingService.readInfo(userId, roomId, token));
 		
 		return ResponseEntity.ok(new KpayResponse("SUCCESS", "뿌리기 건 조회 성공", resultMap));
 	}

@@ -22,10 +22,11 @@ public class MoneySpreadingResult {
 	private Date regDttm;
 	private Date modiDttm;
 	private String modiEmno;
+	private char cmpeYn;
 	
 	@Builder
 	public MoneySpreadingResult(int spreadingResultId, int spreadingId, BigDecimal moneyAmount, int userId,
-			Date receivedDttm, String regEmno, Date regDttm, Date modiDttm, String modiEmno) {
+			Date receivedDttm, String regEmno, Date regDttm, Date modiDttm, String modiEmno, char cmpeYn) {
 		super();
 		this.spreadingResultId = spreadingResultId;
 		this.spreadingId = spreadingId;
@@ -36,6 +37,7 @@ public class MoneySpreadingResult {
 		this.regDttm = regDttm;
 		this.modiDttm = modiDttm;
 		this.modiEmno = modiEmno;
+		this.cmpeYn = cmpeYn;
 	}
 	
 	

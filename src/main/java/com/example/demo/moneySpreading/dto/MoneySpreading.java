@@ -27,6 +27,8 @@ public class MoneySpreading {
 	private Date regDttm;
 	private Date modiDttm;
 	private String modiEmno;
+	private char cmpeYn;
+	
 	// 유효성 검사 : 시간
 	@JsonIgnore
 	private int validationInterval;
@@ -39,7 +41,7 @@ public class MoneySpreading {
 	@Builder
 	public MoneySpreading(int spreadingId, int userId, String roomId, BigDecimal moneyAmount, int userCount,
 			String token, Date spreadingDttm, String regEmno, Date regDttm, Date modiDttm, String modiEmno,
-			int validationInterval, String validationUnit, BigDecimal takenMoneyAmount) {
+			int validationInterval, String validationUnit, BigDecimal takenMoneyAmount, char cmpeYn) {
 		super();
 		this.spreadingId = spreadingId;
 		this.userId = userId;
@@ -55,6 +57,7 @@ public class MoneySpreading {
 		this.validationInterval = validationInterval;
 		this.validationUnit = validationUnit;
 		this.takenMoneyAmount = takenMoneyAmount;
+		this.cmpeYn = cmpeYn;
 	}
 	
 	
