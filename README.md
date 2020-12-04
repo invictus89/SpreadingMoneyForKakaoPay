@@ -41,7 +41,7 @@
 1. 데이터 모델링
    * 뿌리기 API와 받기 API, 조회 API 순으로 각각 필요한 데이터를 분석하여 총 2개의 테이블을 생성
    
-      ![KPAY_ERD](C:\Users\1nvic\Desktop\KPAY_ERD.JPG)
+      ![KPAY_ERD](\images\KPAY_ERD.JPG)
    
 2. API 기능 명세
    * URI 설계 
